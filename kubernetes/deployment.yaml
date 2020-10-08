@@ -48,7 +48,7 @@ spec:
             - "--host=0.0.0.0"
             - "--port=8000"
         - name: cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.18
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17
           command:
             - "/cloud_sql_proxy"
             - "-instances=colecarter:us-central1:colecarter=tcp:5432"
