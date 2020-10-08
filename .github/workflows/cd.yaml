@@ -21,7 +21,7 @@ jobs:
       - name: Tag new version
         run: |
           echo "deployment.yaml\njobs.yaml" \
-            | xargs -n1 -I "{}" \
+            | xargs -I "{}" \
               sh -c "sed -e 's/{{ STRAWBERRY_TAG }}/'${{ github.sha }}'/g' kubernetes/{} > kubernetes/{}.temp \
                 && mv kubernetes/{}.temp kubernetes/{}"
       - name: Commit new version to release branch
