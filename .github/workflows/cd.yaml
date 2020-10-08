@@ -20,7 +20,7 @@ jobs:
           TAG_NAME: ${{ github.sha }}
       - name: Tag new version
         run: |
-          echo "deployment.yaml jobs.yaml" \
+          echo -n "deployment.yaml jobs.yaml" \
             | xargs -d " " -I "{}" \
               sh -c "sed -e 's/{{ STRAWBERRY_TAG }}/'${{ github.sha }}'/g' kubernetes/{} > kubernetes/{}.temp \
                 && mv kubernetes/{}.temp kubernetes/{}"
