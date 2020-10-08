@@ -1,0 +1,34 @@
+name: CD
+on: [push]
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Docker build & push
+        uses: opspresso/action-docker@master
+        with:
+          args: --docker
+        env:
+          USERNAME: "colecrtr"
+          PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          DOCKERFILE: "Dockerfile"
+          IMAGE_NAME: "colecrtr/strawberry"
+          TAG_NAME: ${{ github.sha }}
+      - name: Tag new version
+        run: |
+          echo "deployment.yaml\njobs.yaml" \
+            | xargs -n1 -I "{}" \
+              sh -c "sed -e 's/{{ STRAWBERRY_TAG }}/'${{ github.sha }}'/g' kubernetes/{} > kubernetes/{}.temp \
+                && mv kubernetes/{}.temp kubernetes/{}"
+      - name: Commit new version to release branch
+        uses: EndBug/add-and-commit@v4
+        with:
+          ref: "release"
+          add: "-A"
+          message: "Release ${{ github.sha }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

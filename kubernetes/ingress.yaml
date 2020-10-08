@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: strawberry
+  namespace: strawberry
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  tls:
+    - hosts:
+        - "strawberry.colecarter.dev"
+      secretName: tls-strawberry-colecarter-dev
+  rules:
+    - host: strawberry.colecarter.dev
+      http:
+        paths:
+          - backend:
+              serviceName: strawberry
+              servicePort: 8000

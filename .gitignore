@@ -2,6 +2,7 @@
 !.gitignore
 !.dockerignore
 !.python-version
+!.github/
 
 *.pyc
-__pycache__
+__pycache__/

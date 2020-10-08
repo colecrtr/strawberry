@@ -1,0 +1,38 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: strawberry
+  namespace: argocd
+spec:
+  description: My personal finance application
+  sourceRepos:
+    - https://github.com/colecrtr/strawberry
+  destinations:
+    - namespace: strawberry
+      server: https://kubernetes.default.svc
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: strawberry
+  namespace: argocd
+spec:
+  project: strawberry
+  source:
+    repoURL: https://github.com/colecrtr/strawberry
+    targetRevision: release
+    path: kubernetes
+  destination:
+    namespace: strawberry
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

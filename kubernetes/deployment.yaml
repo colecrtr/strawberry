@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strawberry
+  namespace: strawberry
+spec:
+  selector:
+    matchLabels:
+      app: strawberry
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: strawberry
+    spec:
+      containers:
+        - name: strawberry
+          image: colecrtr/strawberry:{{ STRAWBERRY_TAG }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django
+                  key: secret-key
+            - name: DJANGO_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: django
+                  key: database-name
+            - name: DJANGO_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: django
+                  key: database-user
+            - name: DJANGO_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: django
+                  key: database-password
+            - name: DJANGO_DATABASE_HOST
+              value: "localhost"
+          command: uvicorn project.asgi:application --host=0.0.0.0 --port=8000
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.18
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances=colecarter:us-central1:colecarter=tcp:5432"
+          securityContext:
+            runAsNonRoot: true
