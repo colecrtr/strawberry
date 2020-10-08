@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  server:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SECRET_KEY=notasecret
+      - DJANGO_DATABASE_NAME=postgres
+      - DJANGO_DATABASE_USER=postgres
+      - DJANGO_DATABASE_PASSWORD=postgres
+      - DJANGO_DATABASE_HOST=database
+    command: |
+      sh -c "python manage.py migrate --no-input && uvicorn project.asgi:application --host=0.0.0.0 --port=8000"
+    depends_on:
+      - database
