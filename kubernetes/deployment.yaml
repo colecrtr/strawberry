@@ -42,7 +42,11 @@ spec:
                   key: database-password
             - name: DJANGO_DATABASE_HOST
               value: "localhost"
-          command: uvicorn project.asgi:application --host=0.0.0.0 --port=8000
+          command:
+            - "uvicorn"
+            - "project.asgi:application"
+            - "--host=0.0.0.0"
+            - "--port=8000"
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.18
           command:

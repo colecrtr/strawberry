@@ -33,7 +33,11 @@ spec:
                 secretKeyRef:
                   name: django
                   key: database-password
-          command: python manage.py migrate --no-input
+          command:
+            - "python"
+            - "manage.py"
+            - "migrate"
+            - "--no-input"
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.18
           command:
