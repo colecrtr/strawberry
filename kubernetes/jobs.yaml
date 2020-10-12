@@ -36,17 +36,40 @@ spec:
                   key: database-password
             - name: DJANGO_DATABASE_HOST
               value: "localhost"
-          command:
-            - "python"
-            - "manage.py"
-            - "migrate"
-            - "--no-input"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              sleep 2s
+              trap "touch /tmp/sidecar/terminate" EXIT
+              python manage.py migrate --no-input
+          volumeMounts:
+            - name: tmp-sidecar
+              mountPath: /tmp/sidecar
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
-          command:
-            - "/cloud_sql_proxy"
-            - "-instances=colecarter:us-central1:colecarter=tcp:5432"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432 & CHILD_PID=$!
+              (
+                while true;
+                  do if [[ -f "/tmp/sidecar/terminate" ]]; then
+                    kill $CHILD_PID;
+                    echo "Killed $CHILD_PID because the main container terminated";
+                  fi;
+                  sleep 1s;
+                done;
+              ) &
+              wait $CHILD_PID;
+              if [[ -f "/tmp/sidecar/terminate" ]]; then exit 0; echo "Exiting"; fi;
+          volumeMounts:
+            - name: tmp-sidecar
+              mountPath: /tmp/sidecar
+              readOnly: true
           securityContext:
             runAsNonRoot: true
       restartPolicy: Never
+      volumes:
+        - name: tmp-sidecar
+          emptyDir: {}
   backoffLimit: 2
