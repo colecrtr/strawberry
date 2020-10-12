@@ -39,7 +39,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              sleep 2s
+              sleep 10s
               trap "touch /tmp/sidecar/terminate" EXIT
               python manage.py migrate --no-input
           volumeMounts:
