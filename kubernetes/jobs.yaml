@@ -51,17 +51,9 @@ spec:
           args:
             - |
               /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432 & CHILD_PID=$!
-              (
-                while true;
-                  do if [[ -f "/tmp/sidecar/terminate" ]]; then
-                    kill $CHILD_PID;
-                    echo "Killed $CHILD_PID because the main container terminated";
-                  fi;
-                  sleep 1s;
-                done;
-              ) &
+              (while true; do if [[ -f "/tmp/sidecar/terminate" ]]; then kill $CHILD_PID; fi; sleep 1s; done;) &
               wait $CHILD_PID;
-              if [[ -f "/tmp/sidecar/terminate" ]]; then exit 0; echo "Exiting"; fi;
+              if [[ -f "/tmp/sidecar/terminate" ]]; then exit 0; fi;
           volumeMounts:
             - name: tmp-sidecar
               mountPath: /tmp/sidecar
