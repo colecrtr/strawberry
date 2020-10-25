@@ -43,7 +43,7 @@ spec:
                   name: django
                   key: database-password
             - name: DJANGO_DATABASE_HOST
-              value: "localhost"
+              value: "127.0.0.1"
           command:
             - "uvicorn"
             - "project.asgi:application"
