@@ -14,6 +14,8 @@ spec:
         - name: strawberry
           image: colecrtr/strawberry:{{ STRAWBERRY_TAG }}
           env:
+            - name: IS_PRODUCTION
+              value: "True"
             - name: DJANGO_SECRET_KEY
               valueFrom:
                 secretKeyRef:

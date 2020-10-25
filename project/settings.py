@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 
+IS_PRODUCTION = bool(os.environ.get("IS_PRODUCTION", False))
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

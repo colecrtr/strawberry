@@ -20,6 +20,8 @@ spec:
           ports:
             - containerPort: 8000
           env:
+            - name: IS_PRODUCTION
+              value: "True"
             - name: DJANGO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
