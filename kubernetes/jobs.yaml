@@ -54,9 +54,9 @@ spec:
             - |
               /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432 &;
               while ! test -f /tmp/sidecar/terminate; do
-                echo "Waiting for sidecar termination flag...";
-                sleep 5;
-              done;
+                echo "Waiting for sidecar termination flag..."
+                sleep 5
+              done
               echo "Sidecar termination flag found";
               exit 0;
           volumeMounts:
