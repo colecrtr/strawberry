@@ -45,14 +45,34 @@ spec:
             - name: DJANGO_DATABASE_HOST
               value: "127.0.0.1"
           command:
-            - "uvicorn"
-            - "project.asgi:application"
-            - "--host=0.0.0.0"
-            - "--port=8000"
+            - "/bin/sh"
+            - "-c"
+          args:
+            - |
+              trap "touch /tmp/sidecar/terminate" EXIT
+              uvicorn project.asgi:application --host=0.0.0.0 --port=8000
+          volumeMounts:
+            - name: tmp-sidecar
+              mountPath: /tmp/sidecar
+              readOnly: true
         - name: cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.17
-          command:
-            - "/cloud_sql_proxy"
-            - "-instances=colecarter:us-central1:colecarter=tcp:5432"
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17-alpine
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - |
+              /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432&
+              while ! test -f /tmp/sidecar/terminate; do
+                echo "Waiting for sidecar termination flag..."
+                sleep 5
+              done
+              echo "Sidecar termination flag found"
+              exit 0
+          volumeMounts:
+            - name: tmp-sidecar
+              mountPath: /tmp/sidecar
+              readOnly: true
           securityContext:
             runAsNonRoot: true
+      volumes:
+        - name: tmp-sidecar
+          emptyDir: {}
