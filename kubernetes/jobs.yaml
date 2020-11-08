@@ -52,7 +52,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432 &;
+              /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432&;
               while ! test -f /tmp/sidecar/terminate; do
                 echo "Waiting for sidecar termination flag..."
                 sleep 5
