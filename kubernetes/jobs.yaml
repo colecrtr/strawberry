@@ -41,9 +41,8 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              sleep 10s
-              trap "touch /tmp/sidecar/terminate" EXIT
-              python manage.py migrate --no-input
+              python manage.py migrate --no-input;
+              touch /tmp/sidecar/terminate;
           volumeMounts:
             - name: tmp-sidecar
               mountPath: /tmp/sidecar
@@ -52,10 +51,13 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432 & CHILD_PID=$!
-              (while true; do if [[ -f "/tmp/sidecar/terminate" ]]; then kill $CHILD_PID; fi; sleep 1s; done;) &
-              wait $CHILD_PID;
-              if [[ -f "/tmp/sidecar/terminate" ]]; then exit 0; fi;
+              /cloud_sql_proxy -instances=colecarter:us-central1:colecarter=tcp:5432 &
+              while ! test -f /tmp/sidecar/terminate; do
+                echo "Waiting for sidecar termination flag...";
+                sleep 5;
+              done;
+              echo "Sidecar termination flag found";
+              exit 0;
           volumeMounts:
             - name: tmp-sidecar
               mountPath: /tmp/sidecar
