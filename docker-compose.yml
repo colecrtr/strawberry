@@ -12,6 +12,7 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - ENVIRONMENT=local
       - DJANGO_SECRET_KEY=notasecret
       - DJANGO_DATABASE_NAME=postgres
       - DJANGO_DATABASE_USER=postgres
