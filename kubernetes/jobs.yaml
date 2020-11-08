@@ -41,6 +41,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
+              sleep 10;
               python manage.py migrate --no-input;
               touch /tmp/sidecar/terminate;
           volumeMounts:
