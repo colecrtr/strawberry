@@ -21,7 +21,7 @@ jobs:
         run: flake8 project/
       - name: Pytest
         run: docker-compose up -d && pytest
-  deploy:
+  release:
     if: github.ref == 'refs/heads/main'
     needs: test
     runs-on: ubuntu-latest
