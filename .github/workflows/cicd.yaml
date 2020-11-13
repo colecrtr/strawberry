@@ -20,11 +20,7 @@ jobs:
       - name: Flake8
         run: flake8 project/
       - name: Pytest
-        run: |
-          docker-compose build && docker-compose run server sh -c '
-            cat dev.requirements.txt | grep pytest | xargs pip install
-            pytest
-          '
+        run: docker-compose up -d && pytest
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: test

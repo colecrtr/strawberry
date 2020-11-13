@@ -1,3 +1,4 @@
+import os
 import typing
 
 
@@ -10,11 +11,22 @@ class Fork:
         if not self.paths:
             raise ValueError("No paths evaluated to True")
 
-    def __call__(self, **paths_to_values: typing.Any):
+    def __call__(self, **paths_to_values: typing.Any) -> typing.Any:
         for path in self.paths:
             try:
-                return paths_to_values[path]
+                value = paths_to_values[path]
+                if callable(value):
+                    value = value()
+
+                return value
             except KeyError:
                 pass
 
         raise ValueError("No available path to a value")
+
+    @staticmethod
+    def get_env_var(*args):
+        def get_env_var():
+            return os.environ.get(*args)
+
+        return get_env_var

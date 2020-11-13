@@ -27,12 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = ENV_FORK(dev=Fork.get_env_var("DJANGO_SECRET_KEY"), local="abc123")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENV_FORK(dev=False, local=True)
 
-ALLOWED_HOSTS = ENV_FORK(dev=["strawberry.colecarter.dev"], local=["127.0.0.1"])
+LOCAL_HOST = "127.0.0.1"
+ALLOWED_HOSTS = ENV_FORK(dev=["strawberry.colecarter.dev"], local=[LOCAL_HOST])
 
 
 # Application definition
@@ -83,11 +84,21 @@ WSGI_APPLICATION = "project.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["DJANGO_DATABASE_NAME"],
-        "USER": os.environ["DJANGO_DATABASE_USER"],
-        "PASSWORD": os.environ["DJANGO_DATABASE_PASSWORD"],
-        "HOST": os.environ["DJANGO_DATABASE_HOST"],
         "PORT": 5432,
+        **ENV_FORK(
+            dev={
+                "NAME": Fork.get_env_var("DJANGO_DATABASE_NAME"),
+                "USER": Fork.get_env_var("DJANGO_DATABASE_USER"),
+                "PASSWORD": Fork.get_env_var("DJANGO_DATABASE_PASSWORD"),
+                "HOST": Fork.get_env_var("DJANGO_DATABASE_HOST"),
+            },
+            local={
+                "NAME": "postgres",
+                "USER": "postgres",
+                "PASSWORD": "postgres",
+                "HOST": LOCAL_HOST,
+            },
+        ),
     }
 }
 
