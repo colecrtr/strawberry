@@ -1,0 +1,35 @@
+// https://atrium.mx.com/docs#mx-connect-widget
+<script src="https://atrium.mx.com/connect.js"></script>
+<script>
+  // Create an instance of MXConnect with settings appropriate for your app.
+  // There should only be one instance of MXConnect in your app.
+  var mxConnect = new MXConnect({
+    id: "addAccount",
+    // `URL` is optional at initialization time. Generally you will want to
+    // dynamically get the widget URL and pass it to the `load` method.
+    url: "{{ connect_widget_url }}",
+    onLoad: function () {
+      // Connect widget successfully loaded.
+      // Only called if the `ui_message_version` is below `4` or not set all.
+      console.log("On Load");
+    },
+    onSuccess: function (memberGuid) {
+      // Member created successfully.
+      // Only called if the `ui_message_version` is below `4` or not set all.
+      console.log("On Success");
+    },
+    onEvent: function (event) {
+      // A unified event handler from the MX Connect widget.
+      // Only called if `ui_message_version` is 4 or greater.
+      // Should not be used with `onLoad` or `onSuccess`.
+      console.log(event)
+    }
+  });
+
+  var addAccountClick = function () {
+    // Get a widget URL and call `load` with that URL.
+    mxConnect.load();
+  };
+</script>
+<button onclick="addAccountClick()">Add Account</button>
+<div id="addAccount"></div>

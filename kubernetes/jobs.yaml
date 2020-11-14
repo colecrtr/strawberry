@@ -37,6 +37,16 @@ spec:
                   key: database-password
             - name: DJANGO_DATABASE_HOST
               value: "127.0.0.1"
+            - name: MX_ATRIUM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mx-atrium
+                  key: api-key
+            - name: MX_ATRIUM_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: mx-atrium
+                  key: client-id
           command: ["/bin/sh", "-c"]
           args:
             - |

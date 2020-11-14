@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Custom
     "apps.account",
+    "apps.mx_atrium",
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = "project.urls"
 
 TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {},
+    },
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
@@ -144,3 +151,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+
+# MX Atrium constants
+# https://atrium.mx.com/
+MX_ATRIUM_API_KEY = ENV_FORK(dev=Fork.get_env_var("MX_ATRIUM_API_KEY"), local=None)
+MX_ATRIUM_CLIENT_ID = ENV_FORK(dev=Fork.get_env_var("MX_ATRIUM_CLIENT_ID"), local=None)
+MX_ATRIUM_API_URL = ENV_FORK(dev="https://vestibule.mx.com", local=None)
