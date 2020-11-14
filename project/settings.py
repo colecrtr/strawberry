@@ -158,3 +158,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MX_ATRIUM_API_KEY = ENV_FORK(dev=Fork.get_env_var("MX_ATRIUM_API_KEY"), local=None)
 MX_ATRIUM_CLIENT_ID = ENV_FORK(dev=Fork.get_env_var("MX_ATRIUM_CLIENT_ID"), local=None)
 MX_ATRIUM_API_URL = ENV_FORK(dev="https://vestibule.mx.com", local=None)
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
