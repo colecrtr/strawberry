@@ -88,21 +88,19 @@ WSGI_APPLICATION = "project.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "PORT": 5432,
-        **ENV_FORK(
-            dev={
-                "NAME": Fork.get_env_var("DJANGO_DATABASE_NAME"),
-                "USER": Fork.get_env_var("DJANGO_DATABASE_USER"),
-                "PASSWORD": Fork.get_env_var("DJANGO_DATABASE_PASSWORD"),
-                "HOST": Fork.get_env_var("DJANGO_DATABASE_HOST"),
-            },
-            local={
-                "NAME": "postgres",
-                "USER": "postgres",
-                "PASSWORD": "postgres",
-                "HOST": LOCAL_HOST,
-            },
+        "NAME": ENV_FORK(
+            dev=Fork.get_env_var("DJANGO_DATABASE_NAME"), local="postgres"
         ),
+        "USER": ENV_FORK(
+            dev=Fork.get_env_var("DJANGO_DATABASE_USER"), local="postgres"
+        ),
+        "PASSWORD": ENV_FORK(
+            dev=Fork.get_env_var("DJANGO_DATABASE_PASSWORD"), local="postgres"
+        ),
+        "HOST": ENV_FORK(
+            dev=Fork.get_env_var("DJANGO_DATABASE_HOST"), local=LOCAL_HOST
+        ),
+        "PORT": 5432,
     }
 }
 
