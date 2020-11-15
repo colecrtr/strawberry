@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 
 class ConnectWidgetView(View):
     def get(self, request):
-        user = User.objects.get_or_create_from_account_user(account_user=request.user)
+        user, _created = User.objects.get_or_create_from_mx_atrium(
+            account_user=request.user
+        )
         connect_widget_url = user.get_connect_widget_url()
 
         logger.info(
