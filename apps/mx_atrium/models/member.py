@@ -68,12 +68,12 @@ class Member(BaseModel):
     institution = models.ForeignKey(
         to="mx_atrium.Institution",
         on_delete=models.PROTECT,
-        verbose_name=_("MX Atrium Institution"),
+        verbose_name=_("Institution"),
     )
     user = models.ForeignKey(
         to="mx_atrium.User",
         on_delete=models.CASCADE,
-        verbose_name=_("MX Atrium User"),
+        verbose_name=_("MX Atrium user"),
     )
 
     # MX Atrium fields (docs: https://atrium.mx.com/docs#member-fields)
@@ -83,31 +83,31 @@ class Member(BaseModel):
     # - `is_being_aggregated` is unused because it is time-sensitive to active requests
     # - `oauth_window_uri` is unused because it is time-sensitive to active requests
     aggregated_at = models.DateTimeField(
-        verbose_name=_("MX Atrium aggregated_at"),
+        verbose_name=_("Aggregated at"),
         help_text=_("The date and time the account was last aggregated."),
     )
     connection_status = models.CharField(
         max_length=3,
         choices=ConnectionStatus.choices,
-        verbose_name=_("MX Atrium connection_status"),
+        verbose_name=_("Connection status"),
         help_text=_("The status of a member's aggregation."),
     )
     guid = models.CharField(
         max_length=256,
         unique=True,
-        verbose_name=_("MX Atrium guid"),
+        verbose_name=_("GUID"),
         help_text=_("A unique identifier for the member. Defined by MX."),
     )
     name = models.CharField(
         max_length=256,
-        verbose_name=_("MX Atrium name"),
+        verbose_name=_("Name"),
         help_text=_(
             "The name of the member. If omitted as a parameter when creating the member, the "
             'institution name within the MX platform will be used, e.g., "Chase Bank."'
         ),
     )
     successfully_aggregated_at = models.DateTimeField(
-        verbose_name=_("MX Atrium successfully_aggregated_at"),
+        verbose_name=_("Successfully aggregated at"),
         help_text=_("The date and time the member was successfully aggregated."),
     )
 

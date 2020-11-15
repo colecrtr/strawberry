@@ -61,7 +61,7 @@ class User(BaseModel):
     account_user = models.OneToOneField(
         to="account.User",
         on_delete=models.CASCADE,
-        verbose_name=_("Account User"),
+        verbose_name=_("Account user"),
         help_text=_("Application User this MX Atrium User belongs to"),
     )
 
@@ -71,11 +71,11 @@ class User(BaseModel):
     guid = models.CharField(
         max_length=256,
         unique=True,
-        verbose_name=_("MX Atrium guid"),
+        verbose_name=_("GUID"),
         help_text=_("A unique identifier, defined by MX."),
     )
     is_disabled = models.BooleanField(
-        verbose_name=_("MX Atrium is_disabled"),
+        verbose_name=_("Is disabled"),
         help_text=_("True if you want the user disabled, false otherwise."),
     )
 

@@ -48,32 +48,32 @@ class Institution(BaseModel):
     code = models.CharField(
         max_length=256,
         unique=True,
-        verbose_name=_("MX Atrium code"),
+        verbose_name=_("code"),
         help_text=_("A unique identifier for each institution, defined by MX."),
     )
     name = models.CharField(
         max_length=256,
-        verbose_name=_("MX Atrium name"),
+        verbose_name=_("name"),
         help_text=_(
             'An easy-to-read name for an institution, e.g., "Chase Bank" or "Wells Fargo Bank".'
         ),
     )
     small_logo_url = models.URLField(
-        verbose_name=_("MX Atrium small_logo_url"),
+        verbose_name=_("Small logo URL"),
         help_text=_(
             "URL for a 50px X 50px logo for each institution. A generic logo is returned for "
             "institutions that don't have one."
         ),
     )
     medium_logo_url = models.URLField(
-        verbose_name=_("MX Atrium medium_logo_url"),
+        verbose_name=_("Medium logo URL"),
         help_text=_(
             "URL for a 100px X 100px logo for each institution. A generic logo is returned for "
             "institutions that don't have one."
         ),
     )
     url = models.URLField(
-        verbose_name=_("MX Atrium url"),
+        verbose_name=_("URL"),
         help_text=_("Website URL for a particular institution, e.g., www.chase.com."),
     )
 
