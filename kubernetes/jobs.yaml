@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: strawberry
-          image: colecrtr/strawberry:{{ STRAWBERRY_TAG }}
+          image: colecrtr/strawberry:8472febadbdb92b8750e66cf7fb19af6b251687c
           env:
             - name: ENVIRONMENT
               value: "dev"
