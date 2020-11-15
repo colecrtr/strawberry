@@ -34,7 +34,6 @@ class MemberManager(models.Manager):
             institution, created = Institution.objects.get_or_create_from_mx_atrium(
                 code=member_data.institution_code
             )
-            logger.info(f"{'Created' if created else 'Updated'} {institution}")
 
             member, created = self.update_or_create(
                 guid=member_data.guid,
