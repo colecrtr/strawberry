@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 from typing import Callable
 from typing import Iterator
 from typing import Type
@@ -18,11 +19,15 @@ class MXAtriumAPI(atrium.AtriumClient):
 
     @staticmethod
     def get_objects_generator(
-        list_method: Callable, data_key: str, obj_type: Type[_MXAtriumTypeVar]
+        list_method: Callable,
+        list_method_kwargs: Any,
+        data_key: str,
+        obj_type: Type[_MXAtriumTypeVar],
     ) -> Iterator[_MXAtriumTypeVar]:
         """Gets generator that paginates through the given list_method
 
         :param list_method: MX Atrium method to paginate
+        :param list_method_kwargs: Keyword arguments to unpack in the list_method call
         :param data_key: Location of the list of obj_types is in API response
         :param obj_type: Type of objects being yielded
         :return: Generator of the given obj_type
@@ -31,7 +36,9 @@ class MXAtriumAPI(atrium.AtriumClient):
 
         while True:
             response = list_method(
-                page=page, records_per_page=MXAtriumAPI.MAX_RECORDS_PER_PAGE
+                page=page,
+                records_per_page=MXAtriumAPI.MAX_RECORDS_PER_PAGE,
+                **list_method_kwargs,
             )
             objects: list[_MXAtriumTypeVar] = getattr(response, data_key)
 
@@ -103,22 +110,26 @@ class MXAtriumAPI(atrium.AtriumClient):
 
         return user
 
-    def get_users(self) -> Iterator[atrium.User]:
+    def get_users(self, **kwargs) -> Iterator[atrium.User]:
         """Gets a generator of MX Atrium Users managed by the auth'd client
 
         :return: Generator of MX Atrium Users
         """
         return self.__class__.get_objects_generator(
-            list_method=self.users.list_users, data_key="users", obj_type=atrium.User
+            list_method=self.users.list_users,
+            list_method_kwargs=kwargs,
+            data_key="users",
+            obj_type=atrium.User,
         )
 
-    def get_members(self) -> Iterator[atrium.Member]:
+    def get_members(self, **kwargs) -> Iterator[atrium.Member]:
         """Gets a generator of MX Atrium Members managed by the auth'd client
 
         :return: Generator of MX Atrium Members
         """
         return self.__class__.get_objects_generator(
             list_method=self.members.list_members,
+            list_method_kwargs=kwargs,
             data_key="members",
             obj_type=atrium.Member,
         )

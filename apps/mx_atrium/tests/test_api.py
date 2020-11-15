@@ -25,6 +25,7 @@ class MXAtriumAPITest(TestCase):
         objects = list(
             MXAtriumAPI.get_objects_generator(
                 list_method=list_method,
+                list_method_kwargs={},
                 data_key="data_key",
                 obj_type=atrium.User,
             )

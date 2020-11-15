@@ -25,10 +25,10 @@ class MemberManager(models.Manager):
         name: str
         successfully_aggregated_at: datetime.datetime
 
-    def update_or_create_from_mx_atrium(self):
-        """Updates or creates MX Atrium Members in our database to match theirs"""
+    def update_or_create_from_mx_atrium(self, user: User):
+        """Updates or creates MX Atrium Members of a User in our database to match theirs"""
 
-        for member_data in mx_atrium_api.get_members():
+        for member_data in mx_atrium_api.get_members(user_guid=user.guid):
             user = User.objects.get(guid=member_data.user_guid)
 
             institution, created = Institution.objects.get_or_create_from_mx_atrium(

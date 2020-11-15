@@ -33,7 +33,7 @@ class MemberManagerTest(TestCase):
             )
         ]
 
-        Member.objects.update_or_create_from_mx_atrium()
+        Member.objects.update_or_create_from_mx_atrium(user=expected_to_update.user)
 
         expected_to_update.refresh_from_db()
         self.assertEqual(
@@ -66,6 +66,6 @@ class MemberManagerTest(TestCase):
         ]
 
         self.assertFalse(Member.objects.filter(guid=expected_guid).exists())
-        Member.objects.update_or_create_from_mx_atrium()
+        Member.objects.update_or_create_from_mx_atrium(user=user)
 
         self.assertTrue(Member.objects.filter(guid=expected_guid).exists())
